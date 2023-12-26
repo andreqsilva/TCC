@@ -35,13 +35,12 @@ def grid_parameters(rows, columns, magnification):
          (magnification / lowest_dimension * 100) * (columns / 100)]
     return math.floor(Q[0]), math.floor(Q[1])
 
-def select_representative_region(image, magnification):
-    rows, columns = image.shape[:2]
+def select_representative_region(image, rows, columns, magnification):
     grid_row, grid_column = grid_parameters(rows, columns, magnification)
     quadrant_size = (grid_row, grid_column)
     selected_region, highest_entropy = get_best_region(image, rows, columns, quadrant_size)
 
-    # plotar região seleciona com seu histograma
+    '''# plotar região seleciona com seu histograma
     grayscale_image = cv2.cvtColor(selected_region, cv2.COLOR_BGR2GRAY)    
     histogram = cv2.calcHist([grayscale_image], [0], None, [256], [0, 256])
 
@@ -60,6 +59,6 @@ def select_representative_region(image, magnification):
     axs[1].set_ylabel('Número de Pixels')
 
     #plt.tight_layout()
-    plt.show()
+    plt.show()'''
 
     return selected_region

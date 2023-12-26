@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-from BLTrans import beer_lambert
+from BLTrans import BLTrans
 from representative_region import select_representative_region
 
 def load_image(path):
@@ -19,7 +19,7 @@ def main():
         image = load_image(path)
         
         I = select_representative_region(image, magnification)
-        beer_lambert(I, image_name)
+        BLTrans(I, image_name)
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-from est_W import calculate_W
+from hpcNMF.estW import calculate_W
 
 def load_image(path):
     image = cv2.imread(path)
@@ -8,8 +8,11 @@ def load_image(path):
         raise FileNotFoundError(f"Erro ao carregar a imagem em {path}.")
     return np.array(image)
 
-def calculate_H(W, Ivecd):
-    return np.linalg.lstsq(W, Ivecd, rcond=None)[0]
+def calculate_H(Ws, Ivecd):
+    # calcula a pseudo-inversa
+    Hs_vec = np.linalg.inv(Ws.T @ Ws) @ Ws.T @ Ivecd
+    Hs_vec[Hs_vec < 0] = 0  # transforma valores negativos em 0
+    return Hs_vec
 
 def reconstruct_image(W, H, rows, columns, channels):
     V = np.dot(W, H).reshape((rows, columns, channels))
@@ -29,8 +32,10 @@ def main():
 
     target_rows, target_columns, channels = target_image.shape
     Ivecd = np.double(target_image.reshape((channels, target_rows * target_columns)))
+    
     path_w = f"./tests/ED/V-{images[0]}.ED.k2.W0"
     W_target = calculate_W(path_w)
+    
     H_target = calculate_H(W_target, Ivecd)
     
     for source_image_name in images[1:]:
