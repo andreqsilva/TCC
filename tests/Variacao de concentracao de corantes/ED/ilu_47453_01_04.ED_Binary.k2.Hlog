@@ -1,0 +1,21 @@
+run0 ConsecutiveError 0.00667927 Convergence 1 Error 5.06579 Hsparseness 0.119611 TotalUpdateSteps 20 Wsparseness 0.28333
+run1 ConsecutiveError 0.000400074 Convergence 1 Error 6.04338 Hsparseness 0.186609 TotalUpdateSteps 20 Wsparseness 0.129726
+run2 ConsecutiveError 0.00274996 Convergence 1 Error 3.35551 Hsparseness 0.145192 TotalUpdateSteps 60 Wsparseness 0.177186
+run3 ConsecutiveError 0.00419643 Convergence 1 Error 3.39555 Hsparseness 0.171494 TotalUpdateSteps 100 Wsparseness 0.149319
+run4 ConsecutiveError 0.00496528 Convergence 1 Error 3.36075 Hsparseness 0.161105 TotalUpdateSteps 60 Wsparseness 0.159618
+run5 ConsecutiveError 0.00498409 Convergence 1 Error 3.46612 Hsparseness 0.16355 TotalUpdateSteps 100 Wsparseness 0.178867
+run6 ConsecutiveError 0.00459261 Convergence 1 Error 3.4283 Hsparseness 0.232429 TotalUpdateSteps 100 Wsparseness 0.310521
+run7 ConsecutiveError 0.000451086 Convergence 1 Error 6.04393 Hsparseness 0.188154 TotalUpdateSteps 20 Wsparseness 0.121008
+run8 ConsecutiveError 0.000921737 Convergence 1 Error 6.03737 Hsparseness 0.184777 TotalUpdateSteps 20 Wsparseness 0.115544
+run9 ConsecutiveError 0.000126218 Convergence 1 Error 5.24779 Hsparseness 0.11174 TotalUpdateSteps 20 Wsparseness 0.411032
+run10 ConsecutiveError 0.00269965 Convergence 1 Error 3.35733 Hsparseness 0.182584 TotalUpdateSteps 60 Wsparseness 0.326333
+run11 ConsecutiveError 0.00487793 Convergence 1 Error 3.41739 Hsparseness 0.20073 TotalUpdateSteps 80 Wsparseness 0.271077
+run12 ConsecutiveError 0.0059654 Convergence 1 Error 3.5197 Hsparseness 0.155202 TotalUpdateSteps 80 Wsparseness 0.21204
+run13 ConsecutiveError 0.00325937 Convergence 1 Error 6.00082 Hsparseness 0.18742 TotalUpdateSteps 20 Wsparseness 0.121828
+run14 ConsecutiveError 0.00545095 Convergence 1 Error 5.97063 Hsparseness 0.180982 TotalUpdateSteps 20 Wsparseness 0.117327
+run15 ConsecutiveError 0.00448671 Convergence 1 Error 3.35232 Hsparseness 0.141993 TotalUpdateSteps 120 Wsparseness 0.176074
+run16 ConsecutiveError 0.00201581 Convergence 1 Error 6.01777 Hsparseness 0.193437 TotalUpdateSteps 20 Wsparseness 0.152891
+run17 ConsecutiveError 0.000453757 Convergence 1 Error 6.03838 Hsparseness 0.185718 TotalUpdateSteps 20 Wsparseness 0.135615
+run18 ConsecutiveError 0.00371341 Convergence 1 Error 3.33955 Hsparseness 0.151108 TotalUpdateSteps 60 Wsparseness 0.184022
+run19 ConsecutiveError 0.00536922 Convergence 1 Error 5.96049 Hsparseness 0.183898 TotalUpdateSteps 20 Wsparseness 0.123791
+rank: 2 alpha: 1 cophenetic: 0.915124 spearman: -9.15588e+007 adjustedRandIndex: -1 MutualInformationIndex: -1 kupaOverall: 0.735418 tPointScatter: 553065 wPointScatter: 4.78393e-007 mcRate: -1 mcBDRate: -1 indMcRate: 0 indNMI: 0 indRandIndex: 0 Kupas =>  clt0 0.739745 clt1 0.705676

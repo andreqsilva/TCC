@@ -1,0 +1,21 @@
+run0 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.366605 TotalUpdateSteps 2000 Wsparseness 0.00311741
+run1 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.363394 TotalUpdateSteps 2000 Wsparseness 0.00351981
+run2 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.411004 TotalUpdateSteps 2000 Wsparseness 0.17884
+run3 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.368524 TotalUpdateSteps 2000 Wsparseness 0.0868636
+run4 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.370911 TotalUpdateSteps 2000 Wsparseness 0.00264288
+run5 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.374181 TotalUpdateSteps 2000 Wsparseness 0.00317307
+run6 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.384107 TotalUpdateSteps 2000 Wsparseness 0.0233753
+run7 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.360833 TotalUpdateSteps 2000 Wsparseness 0.0551858
+run8 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.379667 TotalUpdateSteps 2000 Wsparseness 0.0174401
+run9 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.387211 TotalUpdateSteps 2000 Wsparseness 0.057827
+run10 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.386799 TotalUpdateSteps 2000 Wsparseness 0.0503256
+run11 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.384427 TotalUpdateSteps 2000 Wsparseness 0.0456234
+run12 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.386215 TotalUpdateSteps 2000 Wsparseness 0.183622
+run13 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.399877 TotalUpdateSteps 2000 Wsparseness 0.0699035
+run14 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.365062 TotalUpdateSteps 2000 Wsparseness 0.0252324
+run15 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.36578 TotalUpdateSteps 2000 Wsparseness 0.0758959
+run16 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.363637 TotalUpdateSteps 2000 Wsparseness 0.0147314
+run17 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.400388 TotalUpdateSteps 2000 Wsparseness 0.105539
+run18 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.385886 TotalUpdateSteps 2000 Wsparseness 0.199231
+run19 ConsecutiveError 1.#QNAN Convergence 0 Error -1.#IND Hsparseness 0.36448 TotalUpdateSteps 2000 Wsparseness 0.00278046
+rank: 2 alpha: 1 cophenetic: 0.91979 spearman: -1.00749e+008 adjustedRandIndex: -1 MutualInformationIndex: -1 kupaOverall: 0.864269 tPointScatter: 586756 wPointScatter: 2.31325e-007 mcRate: -1 mcBDRate: -1 indMcRate: 0 indNMI: 0 indRandIndex: 0 Kupas =>  clt0 0.796627 clt1 0.968983

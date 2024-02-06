@@ -8,8 +8,9 @@ env/
 # diretorios
 __pycache__/
 dataset/
-tests/
+#tests/
+#results/
 grid-images/
 
 # imagens
-*.png
+#*.png

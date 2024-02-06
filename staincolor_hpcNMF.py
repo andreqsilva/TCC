@@ -28,7 +28,7 @@ def estW(path):
 def get_staincolor_hpcNMF(scheme, filename, dir, file):
     try:
         matrix = f"{filename}.txt"
-        command = [dir + file] + ["-s", scheme, "-i", matrix]
+        command = [dir + file] + ["-s", scheme, "-c" , "20", "-n", "200", "-i", matrix]
         print(f"Gerando a matriz W de {filename}")
         result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=dir)
         if result.returncode == 0:

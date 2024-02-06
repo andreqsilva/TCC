@@ -67,7 +67,7 @@ def main():
     plt.tight_layout()
     plt.show()
 
-    show_image(our, f"{source_filename}")
+    #show_image(our, f"{source_filename}")
 
 if __name__ == "__main__":
     main()

@@ -54,17 +54,23 @@ def stainsep(I, filename, magnification, nstains, scheme):
     
     # selecionar região representativa
     region = select_representative_region(I, rows, columns, magnification)
+    show_image(region, 'Region')
 
     # transformada de Beer-Lamber
     [V, V1] = BLTrans(region)
+
+    #print(np.any(V < 0))
     
     # salva a matriz V no formato txt
-    df = pd.DataFrame(V, index=['R', 'G', 'B'], columns=list(range(0, V.shape[1])))
+    df = pd.DataFrame(V, index=['B', 'G', 'R'], columns=list(range(0, V.shape[1])))
     df.to_csv(f'./tests/Variacao de concentracao de corantes/{scheme}/{filename}.txt', sep='\t', header='\t')
     
     Wi = get_staincolor_hpcNMF(scheme, filename, f"./tests/Variacao de concentracao de corantes/{scheme}/", "hpcNMF.win")
     #Wi = estW(f"./tests/Variacao de concentracao de corantes/{scheme}/{filename}.{scheme}.k2.W0")
     
+    '''for linha in Wi:
+        linha[0], linha[1] = linha[1], linha[0]'''
+
     # np.savetxt(f'./tests/Variacao de concentracao de corantes/{scheme}/V_{filename}.txt', W)
 
     #model = NMF(n_components=nstains, init='random', random_state=42, max_iter=1200)
