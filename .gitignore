@@ -1,6 +1,6 @@
 # ignorar o hpcNMF.exe
 # pois a licença não é pública
-tests/hpcNMF.exe
+*.win
 
 # env
 env/
