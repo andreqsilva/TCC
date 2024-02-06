@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import matplotlib.pyplot as plt
 
 from stainsep import stainsep
 
@@ -14,31 +15,19 @@ def show_image(image, image_name):
     cv2.waitKey(0)
 
 def SCN(source, Hta, Wta, Hso):
-    Hso = np.reshape(Hso, (Hso.shape[0] * Hso.shape[1], Hso.shape[2]))
+    #Hso = np.reshape(Hso, (Hso.shape[0] * Hso.shape[1], Hso.shape[2]))
     Hso_Rmax = np.percentile(Hso.flatten(), 99) # percentil de 95
-
-    Hta = np.reshape(Hta, (Hta.shape[0] * Hta.shape[1], Hta.shape[2]))
+    #Hta = np.reshape(Hta, (Hta.shape[0] * Hta.shape[1], Hta.shape[2]))
     Hta_Rmax = np.percentile(Hta.flatten(), 99)
-
-    # fator de normalização
-    normfac = Hta_Rmax / Hso_Rmax
-
-    # multiplica Hso pelo fator de normalização ao longo do eixo 0
+    normfac = Hta_Rmax / Hso_Rmax # fator de normalização
     Hsonorm = Hso * np.tile(normfac, (Hso.shape[0], 1))
-    #Hsonorm = Hso * normfac
 
     Ihat = np.dot(Wta, Hsonorm.T)
 
     # Back projection into spatial intensity space (Inverse Beer-Lambert space)
-    sourcenorm = (255 * np.exp(-Ihat.T.reshape(source.shape))).astype(np.uint8)
-    return sourcenorm
+    sourcenorm = (255 * np.exp(-np.reshape(Ihat.T, source.shape))).astype(np.uint8)
 
-def reconstruct_image(W, H, rows, columns, channels):
-    H = np.reshape(H, (H.shape[2], H.shape[0] * H.shape[1]))
-    V = np.dot(W, H).reshape((rows, columns, channels))
-    #return (255 * np.exp(-np.reshape(V, (rows, columns, channels))))
-    V = np.clip(V, 0, 255).astype(np.uint8)
-    return V
+    return sourcenorm
 
 def main():
     nstains = 2
@@ -46,22 +35,39 @@ def main():
     scheme = "KL"
 
     # imagem alvo
-    target_filename = "S13-93 A1-14 B"
-    target_path = f"./dataset/{target_filename}.tif"
+    target_filename = "ilu_47453_01_03"
+    target_path = f"./dataset/Variacao de concentracao de corantes/refs/{target_filename}.tif"
     target = load_image(target_path)
     [Wi, Hi] = stainsep(target, target_filename, magnification, nstains, scheme)
 
-    source_filename = "S13-92 A1-7 B"   
-    source_path = f"./dataset/{source_filename}.tif"
+    source_filename = "ilu_47453_01_04"   
+    source_path = f"./dataset/Variacao de concentracao de corantes/{source_filename}.tif"
     source = load_image(source_path)
     [Wis, His] = stainsep(source, source_filename, magnification, nstains, scheme)
 
+    print(target_filename)
+    print(Wi)
+    print(source_filename)
+    print(Wis)
+
     # color nomalization
-    our = SCN(source, Hi, Wi, His)
+    our = SCN(source, Hi.T, Wi, His.T)
 
-    #our = reconstruct_image(Wi, Hi, source.shape[0], source.shape[1], source.shape[2])
+    cv2.imwrite(f"./results/Variacao de concentracao de corantes/{scheme}/{source_filename}.png", our)
+    
+    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(10, 4), )
+    images = [target, source, our]
+    titles = ['Imagem de referência', 'Imagem original', 'Imagem normalizada']
 
-    show_image(our, "Imagem Reconstruida")
+    for ax, img, title in zip(axes, images, titles):
+        ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        ax.set_title(title)
+        ax.axis('off')
+
+    plt.tight_layout()
+    plt.show()
+
+    show_image(our, f"{source_filename}")
 
 if __name__ == "__main__":
     main()

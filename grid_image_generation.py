@@ -76,8 +76,8 @@ def grid_generation(images, dir, magnification):
     for file in images:
         path = os.path.join(dir, file)
         I = load_image(path)
-        n_rows, n_columns = I.shape[:2]
-        grid_row, grid_column = get_grid_parameters(n_rows, n_columns, magnification)
+        [n_rows, n_columns] = I.shape[:2]
+        [grid_row, grid_column] = get_grid_parameters(n_rows, n_columns, magnification)
         image_in_grids = image_grids(I, n_rows, n_columns, [grid_row, grid_column])
         new_file = "grid_" + os.path.splitext(file)[0] + ".png" 
         target_path = os.path.join(target_dir, new_file)
