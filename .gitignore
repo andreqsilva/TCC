@@ -7,10 +7,14 @@ env/
 
 # diretorios
 __pycache__/
+.ipynb_checkpoints/
 dataset/
-#tests/
+tests/
 #results/
 grid-images/
 
 # imagens
 #*.png
+
+metrics.py
+loop_colonorm.py

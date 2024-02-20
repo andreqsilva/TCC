@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
+import sys
 
 from stainsep import stainsep
 
@@ -37,30 +38,31 @@ def main():
     # imagem alvo
     target_filename = "ilu_47453_01_03"
     target_path = f"./dataset/Variacao de concentracao de corantes/refs/{target_filename}.tif"
-    target = load_image(target_path)
+    target = cv2.cvtColor(load_image(target_path), cv2.COLOR_BGR2RGB)
+    #target = load_image(target_path)
     [Wi, Hi] = stainsep(target, target_filename, magnification, nstains, scheme)
 
-    source_filename = "ilu_47453_01_04"   
+    # imagem original
+    source_filename = "ilu_47453_01_01"   
     source_path = f"./dataset/Variacao de concentracao de corantes/{source_filename}.tif"
+    #source = cv2.cvtColor(load_image(source_path), cv2.COLOR_BGR2RGB)
     source = load_image(source_path)
     [Wis, His] = stainsep(source, source_filename, magnification, nstains, scheme)
-
-    print(target_filename)
-    print(Wi)
-    print(source_filename)
-    print(Wis)
 
     # color nomalization
     our = SCN(source, Hi.T, Wi, His.T)
 
+    #show_image(cv2.cvtColor(our, cv2.COLOR_RGB2BGR), 'Imagem normalizada')
+    #cv2.imwrite(f"./results/Variacao de concentracao de corantes/{scheme}/{source_filename}.png", cv2.cvtColor(our, cv2.COLOR_RGB2BGR))
     cv2.imwrite(f"./results/Variacao de concentracao de corantes/{scheme}/{source_filename}.png", our)
-    
+
     fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(10, 4), )
     images = [target, source, our]
     titles = ['Imagem de referência', 'Imagem original', 'Imagem normalizada']
 
     for ax, img, title in zip(axes, images, titles):
         ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        #ax.imshow(img)
         ax.set_title(title)
         ax.axis('off')
 

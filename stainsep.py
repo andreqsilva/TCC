@@ -40,7 +40,6 @@ def estH(V, Ws, nrows, ncolumns, nstains):
 
     Irecon = np.dot(Hs_vec.T, Ws.T)
     Irecon = (255 * np.exp(-Irecon)).reshape((nrows, ncolumns, 3)).astype(np.uint8)
-
     return Hs_vec, Irecon
 
 def stainsep(I, filename, magnification, nstains, scheme):
@@ -53,23 +52,19 @@ def stainsep(I, filename, magnification, nstains, scheme):
     [rows, columns] = I.shape[:2]
     
     # selecionar região representativa
+    #region = select_representative_region(cv2.cvtColor(I, cv2.COLOR_BGR2RGB), rows, columns, magnification)
     region = select_representative_region(I, rows, columns, magnification)
-    show_image(region, 'Region')
+
 
     # transformada de Beer-Lamber
     [V, V1] = BLTrans(region)
-
-    #print(np.any(V < 0))
     
     # salva a matriz V no formato txt
-    df = pd.DataFrame(V, index=['B', 'G', 'R'], columns=list(range(0, V.shape[1])))
+    df = pd.DataFrame(V, index=['R', 'G', 'B'], columns=list(range(0, V.shape[1])))
     df.to_csv(f'./tests/Variacao de concentracao de corantes/{scheme}/{filename}.txt', sep='\t', header='\t')
     
-    Wi = get_staincolor_hpcNMF(scheme, filename, f"./tests/Variacao de concentracao de corantes/{scheme}/", "hpcNMF.win")
-    #Wi = estW(f"./tests/Variacao de concentracao de corantes/{scheme}/{filename}.{scheme}.k2.W0")
-    
-    '''for linha in Wi:
-        linha[0], linha[1] = linha[1], linha[0]'''
+    #Wi = get_staincolor_hpcNMF(scheme, filename, f"./tests/Variacao de concentracao de corantes/{scheme}/", "hpcNMF.win")
+    Wi = estW(f"./tests/Variacao de concentracao de corantes/{scheme}/{filename}.{scheme}.k2.W0")
 
     # np.savetxt(f'./tests/Variacao de concentracao de corantes/{scheme}/V_{filename}.txt', W)
 
