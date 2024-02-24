@@ -10,11 +10,8 @@ __pycache__/
 .ipynb_checkpoints/
 dataset/
 tests/
-#results/
+results/
 grid-images/
 
 # imagens
-#*.png
-
-metrics.py
-loop_colonorm.py
+*.png

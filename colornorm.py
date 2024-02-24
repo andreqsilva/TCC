@@ -39,14 +39,12 @@ def main():
     target_filename = "ilu_47453_01_03"
     target_path = f"./dataset/Variacao de concentracao de corantes/refs/{target_filename}.tif"
     target = cv2.cvtColor(load_image(target_path), cv2.COLOR_BGR2RGB)
-    #target = load_image(target_path)
     [Wi, Hi] = stainsep(target, target_filename, magnification, nstains, scheme)
 
     # imagem original
     source_filename = "ilu_47453_01_01"   
     source_path = f"./dataset/Variacao de concentracao de corantes/{source_filename}.tif"
-    #source = cv2.cvtColor(load_image(source_path), cv2.COLOR_BGR2RGB)
-    source = load_image(source_path)
+    source = cv2.cvtColor(load_image(source_path), cv2.COLOR_BGR2RGB)
     [Wis, His] = stainsep(source, source_filename, magnification, nstains, scheme)
 
     # color nomalization
@@ -61,7 +59,7 @@ def main():
     titles = ['Imagem de referência', 'Imagem original', 'Imagem normalizada']
 
     for ax, img, title in zip(axes, images, titles):
-        ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        ax.imshow(cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
         #ax.imshow(img)
         ax.set_title(title)
         ax.axis('off')
