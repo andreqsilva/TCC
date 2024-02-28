@@ -10,10 +10,11 @@ def normalize(W):
     #W[0], W[-1] = W[-1].copy(), W[0].copy()
     return np.abs(W)
 
-def estW(path):
+def estW(dir):
+    print(f"estW: {dir}")
     W = []
     for i in range(2):
-        w_path = path[:-1] + str(i)
+        w_path = dir[:-1] + str(i)
         with open(w_path, "r") as file:
             rounds = []
             file.seek(0) # volta para o início do arquivo
@@ -25,15 +26,14 @@ def estW(path):
             W.append(np.mean(rounds, axis=0))
     return normalize(np.array(np.transpose(W)))
 
-def get_staincolor_hpcNMF(scheme, filename, dir, file):
+def get_staincolor_hpcNMF(scheme, filename, database, file):
     try:
+        dir = f"./out/{database}/{scheme}/V/"
         matrix = f"{filename}.txt"
         command = [dir + file] + ["-s", scheme, "-c" , "20", "-n", "200", "-i", matrix]
-        print(f"Gerando a matriz W de {filename}")
         result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=dir)
         if result.returncode == 0:
-            Wi = estW(f"./tests/Variacao de concentracao de corantes/{scheme}/{filename}.{scheme}.k2.W0")
-            print("Matriz W gerada com sucesso!")
+            Wi = estW(f"./out/{database}/{scheme}/V/{filename}.{scheme}.k2.W0")
             return Wi
         sys.exit(1)
 

@@ -12,6 +12,7 @@ dataset/
 tests/
 results/
 grid-images/
+out/
 
 # imagens
 *.png

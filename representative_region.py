@@ -26,7 +26,7 @@ def get_best_region(image, rows, columns, grid_size):
             if SE > highest_entropy:
                 highest_entropy = SE
                 selectd_region = grid
-
+                
     return selectd_region, highest_entropy
 
 def grid_parameters(rows, columns, magnification):

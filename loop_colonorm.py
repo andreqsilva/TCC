@@ -1,15 +1,15 @@
 import numpy as np
 import pandas as pd
 import cv2
-import matplotlib.pyplot as plt
 import sys
 import os
 import shutil
+import time
 
 from image_similarity_measures.quality_metrics import ssim, psnr, fsim, uiq
 from metrics import qssim
-
 from stainsep import stainsep
+from databases import MITOS, displasia, bug
 
 def make_dirs(database, scheme):
     out_path = f"./out/{database}"
@@ -54,29 +54,18 @@ def save_metric(out_metric, database, scheme, metric_name):
 def main():
     nstains = 2
 
-    database = "Displasia"
+    database = "Bug"
     scheme = "KL"
-    magnification = 40
+    magnification = 4
 
     make_dirs(database, scheme)
+    targets, sources = bug("../Bases/Bug")
 
-    # imagem alvo
-    target_filename = "DCIS (139)"   
-    target_path = "../Bases/Reference images/DCIS (139).tif"
-    target = cv2.cvtColor(load_image(target_path), cv2.COLOR_BGR2RGB)
-    [Wi, Hi] = stainsep(target, target_filename, database, magnification, nstains, scheme)
+    if len(targets) != len(sources):
+        print("Número de imagens é imcompatível")
+        sys.exit()
 
-    # imagem original
-    source_filename = "image003-2-roi1"
-    source_path = "../Bases/Displasia/ROIs_no_pre_processing/healthy/image003-2-roi1.tif"
-    source = cv2.cvtColor(load_image(source_path), cv2.COLOR_BGR2RGB)
-    [Wis, His] = stainsep(source, source_filename, database, magnification, nstains, scheme)
-
-    # color nomalization
-    our = SCN(source, Hi.T, Wi, His.T)
-
-    #show_image(cv2.cvtColor(our, cv2.COLOR_RGB2BGR), 'Imagem normalizada')
-    cv2.imwrite(f"./out/{database}/{scheme}/{source_filename}.png", cv2.cvtColor(our, cv2.COLOR_RGB2BGR))
+    nImages = len(targets)
 
     out_uiq = []
     out_fsim = []
@@ -84,11 +73,37 @@ def main():
     out_qssim = []
     out_ssim = []
 
-    out_uiq.append(uiq(source, our))
-    out_fsim.append(fsim(source, our))
-    out_psnr.append(psnr(source, our))
-    out_qssim.append(qssim(source, our))
-    out_ssim.append(ssim(source, our))
+    print(f"\nDatabase: {database}\t Magnification: {magnification}px\t Scheme: {scheme}\t Total images: {nImages}\n")
+    print(f"Image\t Filename\t Completed\t Estimated (H)")
+
+    start = time.time()
+    for index, (target_path, source_path) in enumerate(zip(targets[:1], sources[:1]), start=1):
+        # imagem alvo
+        target_filename = target_path[(target_path.rfind("\\") + 1):]
+        target = cv2.cvtColor(load_image(target_path), cv2.COLOR_BGR2RGB)
+        [Wi, Hi] = stainsep(target, target_filename, database, magnification, nstains, scheme)
+
+        # imagem original
+        source_filename = source_path[(source_path.rfind("\\") + 1):]
+        source = cv2.cvtColor(load_image(source_path), cv2.COLOR_BGR2RGB)
+        [Wis, His] = stainsep(source, source_filename, database, magnification, nstains, scheme)
+
+        # color nomalization
+        our = SCN(source, Hi.T, Wi, His.T)
+
+        out_uiq.append(uiq(source, our))
+        out_fsim.append(fsim(source, our))
+        out_psnr.append(psnr(source, our))
+        out_qssim.append(qssim(source, our))
+        out_ssim.append(ssim(source, our))
+
+        completed = round((index/nImages) * 100, 2)
+
+        current_time = time.time() - start
+        total_estimated_time = (current_time / index) * nImages - current_time
+        hours_estimated_time = total_estimated_time / 3600 
+
+        print(f"{index}\t {source_filename}\t {completed}%\t\t {hours_estimated_time:.2f}")
 
     save_metric(out_uiq, database, scheme, 'uiq')
     save_metric(out_fsim, database, scheme, 'fsim')
@@ -96,23 +111,5 @@ def main():
     save_metric(out_qssim, database, scheme, 'qssim')
     save_metric(out_ssim, database, scheme, 'ssim')
     
-    #cv2.imwrite(f"./results/Variacao de concentracao de corantes/{scheme}/{source_filename}.png", our)
-
-    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(10, 4), )
-    images = [target, source, our]
-    titles = ['Imagem de referência', 'Imagem original', 'Imagem normalizada']
-
-    for ax, img, title in zip(axes, images, titles):
-        ax.imshow(img)
-        ax.set_title(title)
-        ax.axis('off')
-
-    plt.tight_layout()
-    plt.show()
-
-    #show_image(our, f"{source_filename}")
-
-    print(f"Imagem {source_filename} normalizada")
-
 if __name__ == "__main__":
     main()
