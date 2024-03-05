@@ -11,7 +11,6 @@ def normalize(W):
     return np.abs(W)
 
 def estW(dir):
-    print(f"estW: {dir}")
     W = []
     for i in range(2):
         w_path = dir[:-1] + str(i)
@@ -26,14 +25,14 @@ def estW(dir):
             W.append(np.mean(rounds, axis=0))
     return normalize(np.array(np.transpose(W)))
 
-def get_staincolor_hpcNMF(scheme, filename, database, file):
+def get_staincolor_hpcNMF(scheme, filename, database, file, w_path):
     try:
         dir = f"./out/{database}/{scheme}/V/"
         matrix = f"{filename}.txt"
         command = [dir + file] + ["-s", scheme, "-c" , "20", "-n", "200", "-i", matrix]
         result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=dir)
         if result.returncode == 0:
-            Wi = estW(f"./out/{database}/{scheme}/V/{filename}.{scheme}.k2.W0")
+            Wi = estW(w_path)
             return Wi
         sys.exit(1)
 

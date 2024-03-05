@@ -9,7 +9,7 @@ import time
 from image_similarity_measures.quality_metrics import ssim, psnr, fsim, uiq
 from metrics import qssim
 from stainsep import stainsep
-from databases import MITOS, displasia, bug
+from databases import MITOS, DISPLASIA, BUG
 
 def make_dirs(database, scheme):
     out_path = f"./out/{database}"
@@ -53,63 +53,69 @@ def save_metric(out_metric, database, scheme, metric_name):
 
 def main():
     nstains = 2
+    database = "MITOS"
 
-    database = "Bug"
-    scheme = "KL"
-    magnification = 4
+    for scheme in ['KL', 'Renyi', 'ED']:
 
-    make_dirs(database, scheme)
-    targets, sources = bug("../Bases/Bug")
+        #scheme = "KL"
+        magnification = 40
 
-    if len(targets) != len(sources):
-        print("Número de imagens é imcompatível")
-        sys.exit()
+        make_dirs(database, scheme)
+        targets, sources = MITOS("../Bases/MITOS")
 
-    nImages = len(targets)
+        if len(targets) != len(sources):
+            print("Número de imagens é imcompatível")
+            sys.exit()
 
-    out_uiq = []
-    out_fsim = []
-    out_psnr = []
-    out_qssim = []
-    out_ssim = []
+        nImages = len(targets)
 
-    print(f"\nDatabase: {database}\t Magnification: {magnification}px\t Scheme: {scheme}\t Total images: {nImages}\n")
-    print(f"Image\t Filename\t Completed\t Estimated (H)")
+        out_uiq = []
+        out_fsim = []
+        out_psnr = []
+        out_qssim = []
+        out_ssim = []
 
-    start = time.time()
-    for index, (target_path, source_path) in enumerate(zip(targets[:1], sources[:1]), start=1):
-        # imagem alvo
-        target_filename = target_path[(target_path.rfind("\\") + 1):]
-        target = cv2.cvtColor(load_image(target_path), cv2.COLOR_BGR2RGB)
-        [Wi, Hi] = stainsep(target, target_filename, database, magnification, nstains, scheme)
+        print(f"\nDatabase: {database}\t Magnification: {magnification}x\t Scheme: {scheme}\t Total images: {nImages}\n")
+        print(f"Image\t Filename\t\t Completed\t Estimated (h:m)")
 
-        # imagem original
-        source_filename = source_path[(source_path.rfind("\\") + 1):]
-        source = cv2.cvtColor(load_image(source_path), cv2.COLOR_BGR2RGB)
-        [Wis, His] = stainsep(source, source_filename, database, magnification, nstains, scheme)
+        start = time.time()
+        for index, (target_path, source_path) in enumerate(zip(targets, sources), start=1):
+            # imagem alvo
+            target_filename = target_path[(target_path.rfind("\\") + 1):]
+            target = cv2.cvtColor(load_image(target_path), cv2.COLOR_BGR2RGB)
+            [Wi, Hi] = stainsep(target, target_filename, database, magnification, nstains, scheme)
 
-        # color nomalization
-        our = SCN(source, Hi.T, Wi, His.T)
+            # imagem original
+            source_filename = source_path[(source_path.rfind("\\") + 1):]
+            source = cv2.cvtColor(load_image(source_path), cv2.COLOR_BGR2RGB)
+            [Wis, His] = stainsep(source, source_filename, database, magnification, nstains, scheme)
 
-        out_uiq.append(uiq(source, our))
-        out_fsim.append(fsim(source, our))
-        out_psnr.append(psnr(source, our))
-        out_qssim.append(qssim(source, our))
-        out_ssim.append(ssim(source, our))
+            # color nomalization
+            our = SCN(source, Hi.T, Wi, His.T)
 
-        completed = round((index/nImages) * 100, 2)
+            #out_uiq.append(uiq(source, our))
+            out_fsim.append(fsim(source, our))
+            out_psnr.append(psnr(source, our))
+            out_qssim.append(qssim(source, our))
+            out_ssim.append(ssim(source, our))
 
-        current_time = time.time() - start
-        total_estimated_time = (current_time / index) * nImages - current_time
-        hours_estimated_time = total_estimated_time / 3600 
+            completed = round((index/nImages) * 100, 2)
 
-        print(f"{index}\t {source_filename}\t {completed}%\t\t {hours_estimated_time:.2f}")
+            current_time = time.time() - start
+            total_estimated_time = (current_time / index) * nImages - current_time
+            hours_estimated_time = total_estimated_time / 3600 
 
-    save_metric(out_uiq, database, scheme, 'uiq')
-    save_metric(out_fsim, database, scheme, 'fsim')
-    save_metric(out_psnr, database, scheme, 'psnr')
-    save_metric(out_qssim, database, scheme, 'qssim')
-    save_metric(out_ssim, database, scheme, 'ssim')
+            str_hours, str_minutes = str(hours_estimated_time).split('.')
+            hours = int(str_hours)
+            minutes = int(float("0." + str_minutes) * 60)
+
+            print(f"{index}\t {source_filename}\t\t {completed}%\t\t {hours}:{minutes}")
+
+        #save_metric(out_uiq, database, scheme, 'uiq')
+        save_metric(out_fsim, database, scheme, 'fsim')
+        save_metric(out_psnr, database, scheme, 'psnr')
+        save_metric(out_qssim, database, scheme, 'qssim')
+        save_metric(out_ssim, database, scheme, 'ssim')
     
 if __name__ == "__main__":
     main()

@@ -1,34 +1,37 @@
 import os
 
-def bug(dir):
-    subdirs_path = os.path.join(dir, "bug2017_stainnorm_validation_1000px")
-    subdirs = os.listdir(subdirs_path)
+def BUG(dir):
     targets = []
     sources = []
-    for subdir in subdirs:
-        image_path = os.path.join(subdirs_path, subdir)
-        files = os.listdir(image_path)
-        targets.extend(os.path.join(image_path, files[2]) for i in range(len(files) - 1))
-        del files[2]
-        sources.extend([os.path.join(image_path, file) for file in files.copy()])
-    return targets, sources        
+    for currentdir, subdirs, files in os.walk(dir):
+        nfiles = len(files)
+        if nfiles != 0:
+            for file in files:
+                if file.endswith("03.tif"):
+                    repeated_files = [os.path.join(currentdir, file)] * 8
+                    targets.extend(repeated_files)
+                else:
+                    sources.append(os.path.join(currentdir, file))
+    return targets, sources 
 
-def displasia(dir):
-    subdirs_path = os.path.join(dir, "ROIs_no_pre_processing")
-    subdirs = os.listdir(subdirs_path)
+def DISPLASIA(dir):
     sources = []
-    for subdir in subdirs:
-        image_path = os.path.join(subdirs_path, subdir)
-        files = os.listdir(image_path)
-        sources.extend([os.path.join(image_path, file) for file in files])
+    for currentdir, subdirs, files in os.walk(dir):
+        sources.extend([os.path.join(currentdir, file) for file in files])
     return sources
 
 def MITOS(dir):
-    target_path = os.path.join(dir, "cortes 256\\Scanner Aperio")
-    target_files = os.listdir(target_path)
-    targets = [os.path.join(target_path, file) for file in target_files if file.startswith("A")]
+    for currentdir, subdirs, files in os.walk(dir):
+        if currentdir.endswith("Aperio"):
+            targets = [os.path.join(currentdir, file) for file in files if file.startswith("A")]
+        elif currentdir.endswith("Hamamatsu"):
+            sources = [os.path.join(currentdir, file) for file in files if file.startswith("H")]
+    return targets, sources       
 
-    source_path = os.path.join(dir, "cortes 256\\Scanner Hamamatsu")
-    source_files = os.listdir(source_path)
-    sources = [os.path.join(source_path, file) for file in source_files if file.startswith("H")]
-    return targets, sources
+def BREAKHIST(dir, magnification):
+    sources = []
+    magnification = str(magnification) + "X"
+    for currentdir, subdirs, files in os.walk(dir):
+        if currentdir.endswith(magnification):
+            sources.extend([os.path.join(currentdir, file) for file in files])
+    return sources

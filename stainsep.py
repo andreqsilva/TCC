@@ -67,10 +67,16 @@ def stainsep(I, filename, database, magnification, nstains, scheme):
     df = pd.DataFrame(V, index=['R', 'G', 'B'], columns=list(range(0, V.shape[1])))
     df.to_csv(f"./out/{database}/{scheme}/V/{filename}.txt", sep='\t', header='\t')
     
-    w_path = f"./out/{database}/{scheme}/V/{filename}.{scheme}.k2.W0"
-    print(f"Gerando matriz W de {filename}...", end=" ")
-    Wi = estW(w_path) if os.path.exists(w_path) else get_staincolor_hpcNMF(scheme, filename, database, "hpcNMF.win")
-    print("[OK]")
+    if scheme == 'Renyi':
+        w_path = f"./out/{database}/{scheme}/V/{filename}.{scheme}.k2_alpha1.W0"
+    else:
+        w_path = f"./out/{database}/{scheme}/V/{filename}.{scheme}.k2.W0"
+ 
+    #print(w_path)
+
+    #print(f"Gerando matriz W de {filename}...", end=" ")
+    Wi = estW(w_path) if os.path.exists(w_path) else get_staincolor_hpcNMF(scheme, filename, database, "hpcNMF.win", w_path)
+    #print("[OK]")
 
     np.savetxt(f'./out/{database}/{scheme}/W/{filename}.txt', Wi, fmt='%.4f')
 
