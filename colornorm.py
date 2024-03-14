@@ -54,18 +54,18 @@ def save_metric(out_metric, database, scheme, metric_name):
 def main():
     nstains = 2
 
-    database = "Displasia"
+    database = "Bug"
     scheme = "KL"
-    magnification = 40
+    magnification = 4
 
-    make_dirs(database, scheme)
+    #make_dirs(database, scheme)
 
     # imagem alvo
     target_filename = "DCIS (139)"   
     target_path = "../Bases/Reference images/DCIS (139).tif"
     target = cv2.cvtColor(load_image(target_path), cv2.COLOR_BGR2RGB)
     [Wi, Hi] = stainsep(target, target_filename, database, magnification, nstains, scheme)
-
+    
     # imagem original
     source_filename = "image003-2-roi1"
     source_path = "../Bases/Displasia/ROIs_no_pre_processing/healthy/image003-2-roi1.tif"

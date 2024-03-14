@@ -6,8 +6,7 @@ def normalize(W):
     for i in range(W.shape[1]):
         # normaliza cada coluna de W pelo comprimento Euclidiano (norma L2)
         W[:, i] = W[:, i] / np.linalg.norm(W[:, i], 2)
-
-    #W[0], W[-1] = W[-1].copy(), W[0].copy()
+    W[0], W[-1] = W[-1].copy(), W[0].copy()
     return np.abs(W)
 
 def estW(dir):
@@ -29,7 +28,7 @@ def get_staincolor_hpcNMF(scheme, filename, database, file, w_path):
     try:
         dir = f"./out/{database}/{scheme}/V/"
         matrix = f"{filename}.txt"
-        command = [dir + file] + ["-s", scheme, "-c" , "20", "-n", "200", "-i", matrix]
+        command = [dir + file] + ["-s", scheme, "-c" , "6", "-n", "1500", "-i", matrix]
         result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=dir)
         if result.returncode == 0:
             Wi = estW(w_path)

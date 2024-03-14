@@ -5,17 +5,15 @@ import sys
 import os
 import shutil
 import time
+import random
 
 from image_similarity_measures.quality_metrics import ssim, psnr, fsim, uiq
 from metrics import qssim
 from stainsep import stainsep
-from databases import MITOS, DISPLASIA, BUG
+from databases import MITOS, DISPLASIA, BUG, BREAKHIST, UNITOPATHO
 
 def make_dirs(database, scheme):
     out_path = f"./out/{database}"
-    if not os.path.exists(out_path):
-        os.makedirs(out_path)
-        
     scheme_path = os.path.join(out_path, scheme)
     if not os.path.exists(scheme_path):
         os.makedirs(scheme_path)
@@ -23,6 +21,7 @@ def make_dirs(database, scheme):
         shutil.copy("../hpcNMF/hpcNMF.win", os.path.join(scheme_path, "V"))
         os.makedirs(os.path.join(scheme_path, "W"))
         os.makedirs(os.path.join(scheme_path, "metrics"))
+        os.makedirs(os.path.join(scheme_path, "images"))
 
 def load_image(path):
     image = cv2.imread(path)
@@ -53,21 +52,36 @@ def save_metric(out_metric, database, scheme, metric_name):
 
 def main():
     nstains = 2
-    database = "MITOS"
+    database = "Bug"
+    magnification = 4
 
+    target_magnification = 40
+    target_path =  "..\\Bases\\Reference images\\DCIS (139).tif"
+    
+    targets, sources = BUG(f"../Bases/{database}")
+
+    if len(targets) != len(sources):
+        print("Número de imagens é imcompatível")
+        sys.exit()
+
+    nImages = len(targets)
+
+    # Criar uma lista de índices únicos
+
+    total_images = 400
+
+    '''out_path = f"./out/{database}"
+    if not os.path.exists(out_path):
+        os.makedirs(out_path)
+        pos_images = random.sample(range(nImages), total_images)
+        np.savetxt(f"./out/{database}/index.txt", pos_images, fmt='%d')
+    else:
+        pos_images = np.loadtxt(os.path.join(out_path, 'index.txt'), dtype=int)
+        nImages = total_images'''
+    
     for scheme in ['KL', 'Renyi', 'ED']:
 
-        #scheme = "KL"
-        magnification = 40
-
         make_dirs(database, scheme)
-        targets, sources = MITOS("../Bases/MITOS")
-
-        if len(targets) != len(sources):
-            print("Número de imagens é imcompatível")
-            sys.exit()
-
-        nImages = len(targets)
 
         out_uiq = []
         out_fsim = []
@@ -78,8 +92,17 @@ def main():
         print(f"\nDatabase: {database}\t Magnification: {magnification}x\t Scheme: {scheme}\t Total images: {nImages}\n")
         print(f"Image\t Filename\t\t Completed\t Estimated (h:m)")
 
+        # imagem alvo
+        #target_filename = target_path[(target_path.rfind("\\") + 1):]
+        #target = cv2.cvtColor(load_image(target_path), cv2.COLOR_BGR2RGB)
+        #[Wi, Hi] = stainsep(target, target_filename, database, target_magnification, nstains, scheme)
+
         start = time.time()
         for index, (target_path, source_path) in enumerate(zip(targets, sources), start=1):
+        #for index, pos in enumerate(pos_images, start=1):
+
+            #target_path, source_path = targets[pos], sources[pos]
+
             # imagem alvo
             target_filename = target_path[(target_path.rfind("\\") + 1):]
             target = cv2.cvtColor(load_image(target_path), cv2.COLOR_BGR2RGB)
@@ -92,7 +115,8 @@ def main():
 
             # color nomalization
             our = SCN(source, Hi.T, Wi, His.T)
-
+            cv2.imwrite(f"./out/{database}/{scheme}/images/{source_filename}.png", our)
+            
             #out_uiq.append(uiq(source, our))
             out_fsim.append(fsim(source, our))
             out_psnr.append(psnr(source, our))
